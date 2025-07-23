@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: laudopro-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_dev
+      MYSQL_DATABASE: laudopro_db
+      MYSQL_USER: laudopro_user
+      MYSQL_PASSWORD: laudopro_password_dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$$MYSQL_USER", "-p$$MYSQL_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: laudopro-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/laudopro_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: laudopro_user
+      SPRING_DATASOURCE_PASSWORD: laudopro_password_dev
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: laudopro-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    restart: on-failure
+
+volumes:
+  mysql_data:
