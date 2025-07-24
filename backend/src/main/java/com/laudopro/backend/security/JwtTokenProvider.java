@@ -1,6 +1,8 @@
 package com.laudopro.backend.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +55,7 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                     .setSigningKey(key())
                     .build()
-                    .parse(token);
+                    .parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException e) {
             System.out.println("Invalid JWT token");
