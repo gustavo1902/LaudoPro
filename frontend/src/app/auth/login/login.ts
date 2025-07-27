@@ -6,8 +6,8 @@ import { AuthService } from '../../core/auth';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  templateUrl: './login.html',
+  styleUrls: ['./login.css'],
   standalone: true,
   imports: [FormsModule, CommonModule]
 })
