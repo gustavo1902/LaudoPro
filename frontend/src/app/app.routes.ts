@@ -2,26 +2,26 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login'; 
 
 // Rotas de dashboard e 404
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { PatientDashboardComponent } from './patient/dashboard/dashboard.component';
-import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
+import { PatientDashboard } from './patient/dashboard/dashboard';
+import { PageNotFound } from './shared/page-not-found/page-not-found';
 
-import { AuthGuard } from './core/auth.guard'; // Caminho para o AuthGuard
+import { AuthGuard } from './core/auth-guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: 'admin/dashboard',
-    component: AdminDashboardComponent,
+    component: AdminDashboard,
     canActivate: [AuthGuard],
     data: { role: 'ROLE_ADMIN' }
   },
   {
     path: 'patient/dashboard',
-    component: PatientDashboardComponent,
+    component: PatientDashboard,
     canActivate: [AuthGuard],
     data: { role: 'ROLE_PACIENTE' }
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '**', component: PageNotFound }
 ];
