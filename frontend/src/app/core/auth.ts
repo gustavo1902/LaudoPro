@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -8,12 +9,20 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   private apiUrl = '/api/auth';
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isAuthenticatedSubject.next(this.hasToken());
+    }
+  }
 
   private hasToken(): boolean {
     return !!localStorage.getItem('jwtToken');
@@ -23,20 +32,27 @@ export class AuthService {
     return this.http.post(this.apiUrl + '/login', { email, senha }, { responseType: 'text' }).pipe(
       tap((tokenWithBearer: string) => {
         const token = tokenWithBearer.replace('Bearer ', '');
-        localStorage.setItem('jwtToken', token);
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('jwtToken', token);
+        }
         this.isAuthenticatedSubject.next(true);
       })
     );
   }
 
   logout(): void {
-    localStorage.removeItem('jwtToken');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('jwtToken');
+    }
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('jwtToken');
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('jwtToken');
+    }
+    return null;
   }
 
   isAuthenticated(): boolean {
