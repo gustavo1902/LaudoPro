@@ -1,0 +1,38 @@
+<div class="container">
+  <h2>Gerenciamento de Pacientes</h2>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+
+  <div class="card">
+    <h3>{{ isEditing ? 'Editar Paciente' : 'Cadastrar Novo Paciente' }}</h3>
+    <form (ngSubmit)="savePatient()">
+      <div class="form-group">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" [(ngModel)]="isEditing ? selectedPatient.name : newPatient.name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" [(ngModel)]="isEditing ? selectedPatient.email : newPatient.email" name="email" required>
+      </div>
+      <button type="submit">{{ isEditing ? 'Salvar Edição' : 'Cadastrar' }}</button>
+      <button *ngIf="isEditing" type="button" class="bg-gray-500 hover:bg-gray-700 ml-2" (click)="cancelEdit()">Cancelar</button>
+    </form>
+  </div>
+
+  <div class="card mt-6">
+    <h3>Lista de Pacientes</h3>
+    <ul class="list-none">
+      <li *ngFor="let patient of patients" class="flex justify-between items-center py-2 border-b last:border-b-0">
+        <div>
+          <p class="font-bold">{{ patient.name }}</p>
+          <p class="text-sm text-gray-600">{{ patient.email }}</p>
+        </div>
+        <div>
+          <button (click)="editPatient(patient)" class="bg-blue-500 hover:bg-blue-700 mr-2">Editar</button>
+          <button (click)="deletePatient(patient.id)" class="bg-red-500 hover:bg-red-700">Excluir</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
