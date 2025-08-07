@@ -1,0 +1,64 @@
+<div class="container">
+  <h2>Gerenciamento de Exames</h2>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+
+  <div class="card">
+    <h3>Cadastrar Novo Exame</h3>
+    <form (ngSubmit)="createExam()">
+      <div class="form-group">
+        <label for="patient">Paciente:</label>
+        <select id="patient" [(ngModel)]="newExam.patientId" name="patientId" required>
+          <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="type">Tipo:</label>
+        <input type="text" id="type" [(ngModel)]="newExam.type" name="type" required>
+      </div>
+      <div class="form-group">
+        <label for="date">Data:</label>
+        <input type="date" id="date" [(ngModel)]="newExam.date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label for="observations">Observações:</label>
+        <textarea id="observations" [(ngModel)]="newExam.observations" name="observations"></textarea>
+      </div>
+      <button type="submit">Cadastrar Exame</button>
+    </form>
+  </div>
+
+  <div class="card mt-6">
+    <h3>Lista de Exames</h3>
+    <table class="w-full text-left table-auto">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Paciente</th>
+          <th class="px-4 py-2">Tipo</th>
+          <th class="px-4 py-2">Data</th>
+          <th class="px-4 py-2">Status</th>
+          <th class="px-4 py-2">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exam of exams" class="border-b hover:bg-gray-100">
+          <td class="px-4 py-2">{{ exam.id }}</td>
+          <td class="px-4 py-2">{{ exam.patientName }}</td>
+          <td class="px-4 py-2">{{ exam.type }}</td>
+          <td class="px-4 py-2">{{ exam.date | date }}</td>
+          <td class="px-4 py-2">{{ exam.status }}</td>
+          <td class="px-4 py-2">
+            <div *ngIf="exam.status === 'PENDENTE'">
+              <label for="file-{{ exam.id }}" class="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg inline-block">
+                Upload Laudo
+              </label>
+              <input id="file-{{ exam.id }}" type="file" (change)="onFileSelected($event, exam)" class="hidden" accept="application/pdf,image/jpeg,image/png">
+            </div>
+            <span *ngIf="exam.status === 'CONCLUÍDO'" class="text-green-600 font-bold">Laudo Concluído</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
