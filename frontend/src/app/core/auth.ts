@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-
-  private apiUrl = '/api/auth';
+  private readonly apiUrl = 'http://localhost:8080/api/auth'; // Usando URL completa para simulação, nginx.conf lida com o proxy
 
   constructor(
     private http: HttpClient,
@@ -25,13 +25,13 @@ export class AuthService {
   }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('jwtToken');
+    return !!this.getToken();
   }
 
-  login(email: string, senha: string): Observable<string> {
-    return this.http.post(this.apiUrl + '/login', { email, senha }, { responseType: 'text' }).pipe(
-      tap((tokenWithBearer: string) => {
-        const token = tokenWithBearer.replace('Bearer ', '');
+  login(email: string, senha: string): Observable<any> {
+    return this.http.post(this.apiUrl + '/login', { email, senha }).pipe(
+      tap((response: any) => {
+        const token = response.token;
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('jwtToken', token);
         }
@@ -59,22 +59,14 @@ export class AuthService {
     return this.isAuthenticatedSubject.value;
   }
 
-  getUserProfile(): string | null {
+  getUserRole(): string | null {
     const token = this.getToken();
     if (token) {
       try {
-        const payload = token.split('.')[1];
-        const decodedToken = JSON.parse(atob(payload));
-        const email = decodedToken.sub;
-
-        if (email === 'admin@laudopro.com') {
-            return 'ROLE_ADMIN';
-        } else if (email === 'paciente@laudopro.com') {
-            return 'ROLE_PACIENTE';
-        }
-        return null;
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.role; // Assume que a role está no payload do JWT
       } catch (e) {
-        console.error('Erro ao decodificar JWT ou parsear perfil:', e);
+        console.error('Erro ao decodificar JWT:', e);
         return null;
       }
     }
@@ -82,10 +74,10 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getUserProfile() === 'ROLE_ADMIN';
+    return this.getUserRole() === 'ADMIN';
   }
 
   isPatient(): boolean {
-    return this.getUserProfile() === 'ROLE_PACIENTE';
+    return this.getUserRole() === 'PACIENTE';
   }
 }
