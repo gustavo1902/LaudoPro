@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth';
+import { HeaderComponent } from '../../shared/header/header';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule, HeaderComponent]
 })
 export class LoginComponent {
   email = '';
@@ -23,11 +24,12 @@ export class LoginComponent {
     this.authService.login(this.email, this.senha).subscribe({
       next: (response) => {
         console.log('Login bem-sucedido', response);
-        const userProfile = this.authService.getUserProfile();
-        if (userProfile === 'ROLE_ADMIN') {
+        // A lógica de roteamento agora usa o getUserRole para ser mais robusta
+        const userRole = this.authService.getUserRole();
+        if (userRole === 'ADMIN') {
           this.router.navigate(['/admin/dashboard']);
-        } else if (userProfile === 'ROLE_PACIENTE') {
-          this.router.navigate(['/patient/dashboard']);
+        } else if (userRole === 'PACIENTE') {
+          this.router.navigate(['/paciente/dashboard']);
         } else {
           this.router.navigate(['/']);
         }
