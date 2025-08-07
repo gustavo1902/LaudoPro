@@ -1,0 +1,37 @@
+<div class="container">
+  <h2>Meus Exames</h2>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div class="card mt-4">
+    <table class="w-full text-left table-auto">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="px-4 py-2">Tipo</th>
+          <th class="px-4 py-2">Data</th>
+          <th class="px-4 py-2">Status</th>
+          <th class="px-4 py-2">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exam of exams" class="border-b hover:bg-gray-100">
+          <td class="px-4 py-2">{{ exam.type }}</td>
+          <td class="px-4 py-2">{{ exam.date | date }}</td>
+          <td class="px-4 py-2">
+            <span [ngClass]="{
+              'text-yellow-600 font-bold': exam.status === 'PENDENTE',
+              'text-green-600 font-bold': exam.status === 'CONCLUÍDO',
+              'text-red-600 font-bold': exam.status === 'CANCELADO'
+            }">
+              {{ exam.status }}
+            </span>
+          </td>
+          <td class="px-4 py-2">
+            <button *ngIf="exam.status === 'CONCLUÍDO'" (click)="downloadReport(exam.id, exam.type)"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+              Baixar Laudo
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
