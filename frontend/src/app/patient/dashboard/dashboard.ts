@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-patient-dashboard',
+  standalone: true,
   imports: [],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
