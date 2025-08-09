@@ -10,7 +10,7 @@ import { forkJoin } from 'rxjs';
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css'
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboard implements OnInit {
   stats: any = {};
   examTypes: any[] = [];
   isLoading = true;

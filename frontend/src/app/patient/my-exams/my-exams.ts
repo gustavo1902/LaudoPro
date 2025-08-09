@@ -8,7 +8,7 @@ import { ApiService } from '../../core/api';
   imports: [CommonModule],
   templateUrl: './my-exams.html',
 })
-export class MyExamsComponent implements OnInit {
+export class MyExams implements OnInit {
   exams: any[] = [];
   errorMessage: string | null = null;
   

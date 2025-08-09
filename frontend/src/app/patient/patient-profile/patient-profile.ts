@@ -9,7 +9,7 @@ import { ApiService } from '../../core/api';
   imports: [CommonModule, FormsModule],
   templateUrl: './patient-profile.html',
 })
-export class PatientProfileComponent implements OnInit {
+export class PatientProfile implements OnInit {
   patientProfile: any = {};
   errorMessage: string | null = null;
   successMessage: string | null = null;

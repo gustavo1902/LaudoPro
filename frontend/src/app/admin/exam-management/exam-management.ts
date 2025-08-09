@@ -9,7 +9,7 @@ import { ApiService } from '../../core/api';
   imports: [CommonModule, FormsModule],
   templateUrl: './exam-management.html',
 })
-export class ExamManagementComponent implements OnInit {
+export class ExamManagement implements OnInit {
   exams: any[] = [];
   patients: any[] = [];
   selectedExam: any = null;
