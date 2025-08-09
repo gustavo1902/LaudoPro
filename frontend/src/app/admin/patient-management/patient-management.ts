@@ -23,10 +23,14 @@ export class PatientManagement implements OnInit {
     this.fetchPatients();
   }
 
+  get currentPatient() {
+    return this.isEditing ? this.selectedPatient : this.newPatient;
+  }
+
   fetchPatients(): void {
     this.apiService.getPatients().subscribe({
       next: (data) => this.patients = data,
-      error: (err) => this.errorMessage = 'Não foi possível carregar os pacientes.'
+      error: () => this.errorMessage = 'Não foi possível carregar os pacientes.'
     });
   }
 
@@ -42,7 +46,7 @@ export class PatientManagement implements OnInit {
           this.successMessage = 'Paciente excluído com sucesso!';
           this.fetchPatients();
         },
-        error: (err) => this.errorMessage = 'Erro ao excluir paciente.'
+        error: () => this.errorMessage = 'Erro ao excluir paciente.'
       });
     }
   }
@@ -55,7 +59,7 @@ export class PatientManagement implements OnInit {
           this.fetchPatients();
           this.cancelEdit();
         },
-        error: (err) => this.errorMessage = 'Erro ao atualizar paciente.'
+        error: () => this.errorMessage = 'Erro ao atualizar paciente.'
       });
     } else {
       this.apiService.createPatient(this.newPatient).subscribe({
@@ -64,7 +68,7 @@ export class PatientManagement implements OnInit {
           this.fetchPatients();
           this.newPatient = {};
         },
-        error: (err) => this.errorMessage = 'Erro ao cadastrar paciente.'
+        error: () => this.errorMessage = 'Erro ao cadastrar paciente.'
       });
     }
   }
