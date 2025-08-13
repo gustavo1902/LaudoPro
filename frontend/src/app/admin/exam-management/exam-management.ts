@@ -21,10 +21,10 @@ export class ExamManagement implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private fb: FormBuilder 
+    private fb: FormBuilder
   ) {
     this.filterForm = this.fb.group({
-      patientId: [''], 
+      patientId: [''],
       status: [''],
       date: ['']
     });
@@ -32,12 +32,11 @@ export class ExamManagement implements OnInit {
 
   ngOnInit(): void {
     this.fetchPatients();
-    this.fetchExames();   
+    this.fetchExames();
 
-    // Escuta as mudanças nos filtros para buscar os dados automaticamente
     this.filterForm.valueChanges.pipe(
-      debounceTime(400), 
-      distinctUntilChanged() 
+      debounceTime(400),
+      distinctUntilChanged()
     ).subscribe(() => {
       this.fetchExames();
     });
@@ -58,7 +57,6 @@ export class ExamManagement implements OnInit {
     });
   }
   
-  // Método para atualizar o status 
   updateStatus(examId: number, newStatus: string): void {
     this.clearMessages();
     const examToUpdate = { status: newStatus };
@@ -66,7 +64,6 @@ export class ExamManagement implements OnInit {
     this.apiService.updateExam(examId, examToUpdate).subscribe({
       next: () => {
         this.successMessage = `Exame #${examId} atualizado para ${newStatus}.`;
-        // Atualiza o status localmente para resposta visual imediata
         const exam = this.exams.find(e => e.id === examId);
         if (exam) exam.status = newStatus;
       },
@@ -74,25 +71,30 @@ export class ExamManagement implements OnInit {
     });
   }
 
-  // Prepara o arquivo para o upload
   onFileSelected(event: any, examId: number): void {
+    this.clearMessages();
     const file: File = event.target.files[0];
+
     if (file) {
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+      const maxSizeInBytes = 10 * 1024 * 1024;
+
       if (!allowedTypes.includes(file.type)) {
         this.errorMessage = 'Tipo de arquivo inválido. Apenas PDF, JPG e PNG são permitidos.';
+        (event.target as HTMLInputElement).value = '';
         return;
       }
-      if (file.size > 10 * 1024 * 1024) { 
-        this.errorMessage = 'O arquivo é muito grande. O tamanho máximo é 10MB.';
+
+      if (file.size > maxSizeInBytes) {
+        this.errorMessage = `O arquivo é muito grande (${(file.size / 1024 / 1024).toFixed(2)} MB). O tamanho máximo é 10 MB.`;
+        (event.target as HTMLInputElement).value = '';
         return;
       }
+      
       this.fileToUpload[examId] = file;
-      this.clearMessages();
     }
   }
 
-  // Realiza o upload do laudo
   uploadReport(examId: number): void {
     this.clearMessages();
     const file = this.fileToUpload[examId];
@@ -105,7 +107,7 @@ export class ExamManagement implements OnInit {
       next: () => {
         this.successMessage = `Laudo para o exame #${examId} enviado com sucesso!`;
         this.updateStatus(examId, 'CONCLUÍDO');
-        delete this.fileToUpload[examId]; // Limpa o arquivo após o upload
+        delete this.fileToUpload[examId];
       },
       error: () => this.errorMessage = 'Erro ao fazer upload do laudo.'
     });
