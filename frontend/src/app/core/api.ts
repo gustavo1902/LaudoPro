@@ -56,12 +56,20 @@ export class ApiService {
   }
 
   // Dashboard (Admin)
-  getDashboardStats(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/dashboard/stats`);
+    getDashboardStats(filters: any = {}): Observable<any> {
+    let params = new HttpParams();
+    if (filters.startDate) params = params.set('startDate', filters.startDate);
+    if (filters.endDate) params = params.set('endDate', filters.endDate);
+    
+    return this.http.get<any>(`${this.apiUrl}/dashboard/stats`, { params });
   }
   
-  getExamsByStatus(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/dashboard/exams-by-status`);
+  getExamsByStatus(filters: any = {}): Observable<any[]> {
+    let params = new HttpParams();
+    if (filters.startDate) params = params.set('startDate', filters.startDate);
+    if (filters.endDate) params = params.set('endDate', filters.endDate);
+
+    return this.http.get<any[]>(`${this.apiUrl}/dashboard/exams-by-status`, { params });
   }
 
   // Área do Paciente
