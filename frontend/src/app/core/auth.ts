@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-  private readonly apiUrl = 'http://localhost:8080/api/auth'; // Usando URL completa para simulação, nginx.conf lida com o proxy
+  private readonly apiUrl = `${environment.apiUrl}/auth`; 
 
   constructor(
     private http: HttpClient,
@@ -39,6 +40,12 @@ export class AuthService {
       })
     );
   }
+  
+  // Novo método para registro
+  register(name: string, email: string, password: string, role: 'PACIENTE' | 'ADMIN'): Observable<any> {
+    const user = { name, email, password, role };
+    return this.http.post(this.apiUrl + '/register', user);
+  }
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -64,7 +71,8 @@ export class AuthService {
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        return decodedToken.role; // Assume que a role está no payload do JWT
+        // O papel pode estar em um campo diferente, como "roles" ou "scopes"
+        return decodedToken.role || decodedToken.roles?.[0] || null; 
       } catch (e) {
         console.error('Erro ao decodificar JWT:', e);
         return null;
