@@ -1,0 +1,33 @@
+<div class="registration-container">
+  <h2>Patient Registration</h2>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" formControlName="name" class="form-control" required>
+      <div *ngIf="registrationForm.get('name')?.invalid && (registrationForm.get('name')?.dirty || registrationForm.get('name')?.touched)" class="error">
+        <small *ngIf="registrationForm.get('name')?.errors?.['required']">Name is required</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" formControlName="email" class="form-control" required>
+      <div *ngIf="registrationForm.get('email')?.invalid && (registrationForm.get('email')?.dirty || registrationForm.get('email')?.touched)" class="error">
+        <small *ngIf="registrationForm.get('email')?.errors?.['required']">Email is required</small>
+        <small *ngIf="registrationForm.get('email')?.errors?.['email']">Please enter a valid email address</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" formControlName="password" class="form-control" required>
+      <div *ngIf="registrationForm.get('password')?.invalid && (registrationForm.get('password')?.dirty || registrationForm.get('password')?.touched)" class="error">
+        <small *ngIf="registrationForm.get('password')?.errors?.['required']">Password is required</small>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="registrationForm.invalid" class="btn btn-primary">
+      Register
+    </button>
+  </form>
+</div>
