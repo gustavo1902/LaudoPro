@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environment';
 
 @Injectable({
   providedIn: 'root'
