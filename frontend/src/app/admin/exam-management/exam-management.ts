@@ -1,36 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from '../../core/api';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-exam-management',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule], 
   templateUrl: './exam-management.html',
 })
 export class ExamManagement implements OnInit {
   exams: any[] = [];
   patients: any[] = [];
-  selectedExam: any = null;
-  newExam: any = {};
-  file: File | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
   
-  // Filtros
-  filterPatient: string = '';
-  filterStatus: string = '';
+  filterForm: FormGroup;
+  fileToUpload: { [examId: number]: File } = {};
 
-  constructor(private apiService: ApiService) { }
-
-  ngOnInit(): void {
-    this.fetchExams();
-    this.fetchPatients();
+  constructor(
+    private apiService: ApiService,
+    private fb: FormBuilder 
+  ) {
+    this.filterForm = this.fb.group({
+      patientId: [''], 
+      status: [''],
+      date: ['']
+    });
   }
 
-  fetchExams(): void {
-    this.apiService.getExams().subscribe({
+  ngOnInit(): void {
+    this.fetchPatients();
+    this.fetchExames();   
+
+    // Escuta as mudanças nos filtros para buscar os dados automaticamente
+    this.filterForm.valueChanges.pipe(
+      debounceTime(400), 
+      distinctUntilChanged() 
+    ).subscribe(() => {
+      this.fetchExames();
+    });
+  }
+
+  fetchExames(): void {
+    const filters = this.filterForm.value;
+    this.apiService.getExams(filters).subscribe({
       next: (data) => this.exams = data,
       error: (err) => this.errorMessage = 'Não foi possível carregar os exames.'
     });
@@ -42,48 +57,66 @@ export class ExamManagement implements OnInit {
       error: (err) => console.error('Erro ao buscar pacientes:', err)
     });
   }
-
-  createExam(): void {
-    const examData = {
-      ...this.newExam,
-      status: 'PENDENTE'
-    };
-    this.apiService.createExam(examData).subscribe({
-      next: () => {
-        this.successMessage = 'Exame cadastrado com sucesso!';
-        this.fetchExams();
-        this.newExam = {};
-      },
-      error: (err) => this.errorMessage = 'Erro ao cadastrar exame.'
-    });
-  }
   
-  // Este método atualiza o status, observa o arquivo de laudo e envia para o backend
-  updateExamStatusAndUpload(exam: any): void {
-    const examToUpdate = { ...exam, status: 'CONCLUÍDO' };
-    this.apiService.updateExam(exam.id, examToUpdate).subscribe({
+  // Método para atualizar o status 
+  updateStatus(examId: number, newStatus: string): void {
+    this.clearMessages();
+    const examToUpdate = { status: newStatus };
+
+    this.apiService.updateExam(examId, examToUpdate).subscribe({
       next: () => {
-        if (this.file) {
-          this.apiService.uploadReport(exam.id, this.file).subscribe({
-            next: () => {
-              this.successMessage = 'Exame e laudo atualizados com sucesso!';
-              this.fetchExams();
-            },
-            error: (err) => this.errorMessage = 'Erro ao fazer upload do laudo.'
-          });
-        } else {
-          this.successMessage = 'Exame atualizado para CONCLUÍDO com sucesso!';
-          this.fetchExams();
-        }
+        this.successMessage = `Exame #${examId} atualizado para ${newStatus}.`;
+        // Atualiza o status localmente para resposta visual imediata
+        const exam = this.exams.find(e => e.id === examId);
+        if (exam) exam.status = newStatus;
       },
-      error: (err) => this.errorMessage = 'Erro ao atualizar exame.'
+      error: () => this.errorMessage = 'Erro ao atualizar o status do exame.'
     });
   }
 
-  onFileSelected(event: any, exam: any): void {
-    this.file = event.target.files[0];
-    if (this.file) {
-      this.updateExamStatusAndUpload(exam);
+  // Prepara o arquivo para o upload
+  onFileSelected(event: any, examId: number): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        this.errorMessage = 'Tipo de arquivo inválido. Apenas PDF, JPG e PNG são permitidos.';
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) { 
+        this.errorMessage = 'O arquivo é muito grande. O tamanho máximo é 10MB.';
+        return;
+      }
+      this.fileToUpload[examId] = file;
+      this.clearMessages();
     }
+  }
+
+  // Realiza o upload do laudo
+  uploadReport(examId: number): void {
+    this.clearMessages();
+    const file = this.fileToUpload[examId];
+    if (!file) {
+      this.errorMessage = "Nenhum arquivo selecionado para o exame #" + examId;
+      return;
+    }
+
+    this.apiService.uploadReport(examId, file).subscribe({
+      next: () => {
+        this.successMessage = `Laudo para o exame #${examId} enviado com sucesso!`;
+        this.updateStatus(examId, 'CONCLUÍDO');
+        delete this.fileToUpload[examId]; // Limpa o arquivo após o upload
+      },
+      error: () => this.errorMessage = 'Erro ao fazer upload do laudo.'
+    });
+  }
+
+  resetFilters(): void {
+    this.filterForm.reset({ patientId: '', status: '', date: '' });
+  }
+
+  private clearMessages(): void {
+    this.errorMessage = null;
+    this.successMessage = null;
   }
 }
