@@ -79,7 +79,7 @@ O ambiente completo (backend, frontend e banco de dados) é orquestrado pelo Doc
 Crie um arquivo .env na raiz do projeto com o seguinte conteúdo (altere JWT_SECRET para um valor seguro):
 
 ```bash
-JWT_SECRET=LaudoProSecretKeySuperSeguraNaoUseEstaEmProducao
+JWT_SECRET=KeyProducao
 JWT_EXPIRATION_MS=86400000
 ```
 
