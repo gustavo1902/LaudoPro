@@ -24,11 +24,17 @@ services:
     container_name: laudopro-backend
     ports:
       - "8081:8080"
+    env_file:
+      - ./.env 
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/laudopro_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: laudopro_user
       SPRING_DATASOURCE_PASSWORD: laudopro_password_dev
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      APP_JWT_SECRET: ${JWT_SECRET} 
+      APP_JWT_EXPIRATION_MILLISECONDS: ${JWT_EXPIRATION_MS} 
     depends_on:
       mysql_db:
         condition: service_healthy
