@@ -142,6 +142,11 @@ Iniciar serviços em segundo plano:
 docker-compose up -d
 ```
 
+Parar os serviços:
+```bash
+docker-compose down
+```
+
 Parar e remover contêineres, redes e volumes:
 
 ```bash
