@@ -78,7 +78,7 @@
           <td class="px-4 py-2">
             <div class="flex items-center space-x-2">
               <select [value]="exam.status"
-                      (change)="updateStatus(exam.id, $event.target.value)"
+                      (change)="updateStatus(exam.id, $any($event.target).value)"
                       class="rounded-md border-gray-300 text-sm">
                 <option value="PENDENTE">Pendente</option>
                 <option value="CONCLUÍDO">Concluído</option>
