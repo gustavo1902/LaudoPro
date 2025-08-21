@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login';
+import { RegistrationComponent } from './auth/registration/registration.component';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { PatientDashboard } from './patient/dashboard/dashboard';
 import { PageNotFound } from './shared/page-not-found/page-not-found';
@@ -11,6 +12,7 @@ import { PatientProfile } from './patient/patient-profile/patient-profile';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistrationComponent },
   {
     path: 'admin',
     canActivate: [AuthGuard],
