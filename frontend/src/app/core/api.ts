@@ -85,7 +85,8 @@ export class ApiService {
     return this.http.get<any>(`${this.apiUrl}/paciente/perfil`);
   }
   
-  updatePatientProfile(profile: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/paciente/perfil`, profile);
+    updatePatientProfile(profile: any): Observable<any> {
+      return this.http.put(`${this.apiUrl}/paciente/perfil`, profile);
+    }
   }
-}
+
