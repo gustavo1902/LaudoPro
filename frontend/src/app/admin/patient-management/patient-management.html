@@ -1,70 +1,60 @@
 <div class="container">
-  <h2>Gerenciamento de Pacientes</h2>
+  <header class="page-header">
+    <h1 class="page-header__title">Gerenciamento de Pacientes</h1>
+    <p class="page-header__subtitle">Cadastre, edite e visualize os pacientes do sistema</p>
+  </header>
 
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
-
-  <div class="card">
-    <h3>{{ isEditing ? 'Editar Paciente' : 'Cadastrar Novo Paciente' }}</h3>
-    <form (ngSubmit)="savePatient()">
-      <div class="form-group">
-        <label for="name">Nome:</label>
-        <input
-          type="text"
-          id="name"
-          [(ngModel)]="currentPatient.name"
-          name="name"
-          required
-        >
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          [(ngModel)]="currentPatient.email"
-          name="email"
-          required
-        >
-      </div>
-      <button type="submit">{{ isEditing ? 'Salvar Edição' : 'Cadastrar' }}</button>
-      <button
-        *ngIf="isEditing"
-        type="button"
-        class="bg-gray-500 hover:bg-gray-700 ml-2"
-        (click)="cancelEdit()"
-      >
-        Cancelar
-      </button>
-    </form>
-  </div>
-
-  <div class="card mt-6">
-    <h3>Lista de Pacientes</h3>
-    <ul class="list-none">
-      <li
-        *ngFor="let patient of patients"
-        class="flex justify-between items-center py-2 border-b last:border-b-0"
-      >
-        <div>
-          <p class="font-bold">{{ patient.name }}</p>
-          <p class="text-sm text-gray-600">{{ patient.email }}</p>
+  <div *ngIf="errorMessage" class="alert alert--danger">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert--success">{{ successMessage }}</div>
+  
+  <div class="layout-grid">
+    <div class="card form-card">
+      <h2 class="card__title">{{ isEditing ? 'Editar Paciente' : 'Cadastrar Novo Paciente' }}</h2>
+      <form (ngSubmit)="savePatient()" class="patient-form">
+        <div class="form-group">
+          <label for="name" class="form-group__label">Nome Completo</label>
+          <input type="text" id="name" [(ngModel)]="currentPatient.name" name="name" required class="form-group__input">
         </div>
-        <div>
-          <button
-            (click)="editPatient(patient)"
-            class="bg-blue-500 hover:bg-blue-700 mr-2"
-          >
-            Editar
+        <div class="form-group">
+          <label for="email" class="form-group__label">Email</label>
+          <input type="email" id="email" [(ngModel)]="currentPatient.email" name="email" required class="form-group__input">
+        </div>
+        <div class="form-group">
+          <label for="cpf" class="form-group__label">CPF</label>
+          <input type="text" id="cpf" [(ngModel)]="currentPatient.cpf" name="cpf" required class="form-group__input">
+        </div>
+        <div class="form-group">
+          <label for="telefone" class="form-group__label">Telefone</label>
+          <input type="text" id="telefone" [(ngModel)]="currentPatient.telefone" name="telefone" class="form-group__input">
+        </div>
+        <div class="patient-form__actions">
+          <button *ngIf="isEditing" type="button" class="button button--secondary" (click)="cancelEdit()">
+            Cancelar
           </button>
-          <button
-            (click)="deletePatient(patient.id)"
-            class="bg-red-500 hover:bg-red-700"
-          >
-            Excluir
+          <button type="submit" class="button button--primary">
+            {{ isEditing ? 'Salvar Alterações' : 'Cadastrar Paciente' }}
           </button>
         </div>
-      </li>
-    </ul>
+      </form>
+    </div>
+
+    <div class="card list-card">
+      <h2 class="card__title">Lista de Pacientes</h2>
+      <ul class="patient-list">
+        <li *ngFor="let patient of patients" class="patient-list__item">
+          <div class="patient-info">
+            <p class="patient-info__name">{{ patient.name }}</p>
+            <p class="patient-info__email">{{ patient.email }}</p>
+          </div>
+          <div class="patient-list__actions">
+            <button (click)="editPatient(patient)" class="button button--edit">Editar</button>
+            <button (click)="deletePatient(patient.id)" class="button button--delete">Excluir</button>
+          </div>
+        </li>
+        <li *ngIf="!patients || patients.length === 0" class="patient-list__item--empty">
+          Nenhum paciente cadastrado.
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

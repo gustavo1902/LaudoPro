@@ -1,0 +1,54 @@
+.page-header { margin-bottom: var(--spacing-8); }
+.page-header__title { font-size: 2rem; font-weight: 700; }
+.page-header__title--highlight { color: var(--color-primary); }
+.page-header__subtitle { color: var(--color-text-secondary); margin-top: var(--spacing-1); }
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-8);
+}
+@media (min-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr 300px;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-8);
+}
+.stats-card {
+  background-color: var(--color-bg-white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid;
+}
+.stats-card__title { font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: var(--spacing-1); }
+.stats-card__value { font-size: 2rem; font-weight: 700; }
+
+.stats-card--total { border-color: var(--color-secondary); }
+.stats-card--completed { border-color: var(--color-success); }
+.stats-card--completed .stats-card__value { color: var(--color-success); }
+.stats-card--pending { border-color: var(--color-warning); }
+.stats-card--pending .stats-card__value { color: var(--color-warning); }
+
+.card { background-color: var(--color-bg-white); border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); }
+.card__title { font-size: 1.25rem; font-weight: 600; margin-bottom: var(--spacing-4); }
+.table-wrapper { overflow-x: auto; }
+.results-table { width: 100%; border-collapse: collapse; }
+.results-table__row-header { background-color: #fafafa; }
+.results-table__cell-header { padding: var(--spacing-2) var(--spacing-4); text-align: left; font-size: 0.75rem; color: var(--color-text-secondary); text-transform: uppercase; }
+.results-table__row:hover { background-color: #fafafa; }
+.results-table__cell { padding: var(--spacing-2) var(--spacing-4); border-top: 1px solid var(--color-border); }
+.results-table__cell--empty { text-align: center; padding: var(--spacing-8); color: var(--color-text-secondary); }
+.status-badge { display: inline-block; padding: var(--spacing-1) var(--spacing-2); font-size: 0.75rem; font-weight: 600; border-radius: 999px; }
+.status-badge--pendente { background-color: #fef3c7; color: var(--color-warning); }
+.status-badge--concluido { background-color: #dcfce7; color: var(--color-success); }
+.status-badge--cancelado { background-color: #fee2e2; color: var(--color-danger); }
+
+.quick-links { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.quick-links .button { width: 100%; }

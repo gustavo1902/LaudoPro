@@ -1,37 +1,55 @@
 <div class="container">
-  <h2>Meus Exames</h2>
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  <div class="card mt-4">
-    <table class="w-full text-left table-auto">
-      <thead>
-        <tr class="bg-gray-200">
-          <th class="px-4 py-2">Tipo</th>
-          <th class="px-4 py-2">Data</th>
-          <th class="px-4 py-2">Status</th>
-          <th class="px-4 py-2">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let exam of exams" class="border-b hover:bg-gray-100">
-          <td class="px-4 py-2">{{ exam.type }}</td>
-          <td class="px-4 py-2">{{ exam.date | date }}</td>
-          <td class="px-4 py-2">
-            <span [ngClass]="{
-              'text-yellow-600 font-bold': exam.status === 'PENDENTE',
-              'text-green-600 font-bold': exam.status === 'CONCLUÍDO',
-              'text-red-600 font-bold': exam.status === 'CANCELADO'
-            }">
-              {{ exam.status }}
-            </span>
-          </td>
-          <td class="px-4 py-2">
-            <button *ngIf="exam.status === 'CONCLUÍDO'" (click)="downloadReport(exam.id, exam.type)"
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-              Baixar Laudo
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <header class="page-header">
+    <h1 class="page-header__title">Meus Exames</h1>
+    <p class="page-header__subtitle">Visualize seu histórico completo de exames e baixe seus laudos.</p>
+  </header>
+
+  <div *ngIf="errorMessage" class="alert alert--danger">{{ errorMessage }}</div>
+  
+  <div class="card">
+    <div class="card__header">
+      <h2 class="card__title">Histórico de Exames</h2>
+      <span class="card__count">{{ exams.length || 0 }} exames encontrados</span>
+    </div>
+    <div class="table-wrapper">
+      <table class="results-table">
+        <thead>
+          <tr class="results-table__row-header">
+            <th class="results-table__cell-header">Tipo do Exame</th>
+            <th class="results-table__cell-header">Data</th>
+            <th class="results-table__cell-header">Status</th>
+            <th class="results-table__cell-header">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let exam of exams" class="results-table__row">
+            <td class="results-table__cell results-table__cell--main">{{ exam.type }}</td>
+            <td class="results-table__cell">{{ exam.date | date:'dd/MM/yyyy' }}</td>
+            <td class="results-table__cell">
+              <span class="status-badge" [ngClass]="{
+                'status-badge--pendente': exam.status === 'PENDENTE',
+                'status-badge--concluido': exam.status === 'CONCLUÍDO',
+                'status-badge--cancelado': exam.status === 'CANCELADO'
+              }">{{ exam.status }}</span>
+            </td>
+            <td class="results-table__cell">
+              <button *ngIf="exam.status === 'CONCLUÍDO'" (click)="downloadReport(exam.id, exam.type)" class="button button--primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="button__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                <span>Baixar Laudo</span>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="!exams || exams.length === 0">
+            <td colspan="4" class="results-table__cell--empty">
+              <div class="empty-state">
+                <div class="empty-state__icon"></div>
+                <h3 class="empty-state__title">Nenhum Exame Encontrado</h3>
+                <p class="empty-state__text">Você ainda não possui nenhum exame cadastrado no sistema.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

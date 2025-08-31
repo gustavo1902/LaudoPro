@@ -1,0 +1,43 @@
+.page-header { margin-bottom: var(--spacing-8); }
+.page-header__title { font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-1); }
+.page-header__subtitle { color: var(--color-text-secondary); }
+.card { background-color: var(--color-bg-white); border-radius: var(--border-radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow-md); }
+.card__title { font-size: 1.25rem; font-weight: 600; margin-bottom: var(--spacing-4); padding-bottom: var(--spacing-2); border-bottom: 1px solid var(--color-border); }
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-8);
+}
+@media (min-width: 1024px) {
+  .layout-grid {
+    grid-template-columns: 400px 1fr;
+  }
+}
+
+.patient-form { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.form-group__label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: var(--spacing-1); }
+.form-group__input { width: 100%; padding: var(--spacing-2); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); }
+.patient-form__actions { display: flex; justify-content: flex-end; gap: var(--spacing-2); margin-top: var(--spacing-4); }
+
+.patient-list { list-style: none; }
+.patient-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.patient-list__item:first-child { padding-top: 0; }
+.patient-list__item:last-child { border-bottom: none; }
+.patient-info__name { font-weight: 600; }
+.patient-info__email { font-size: 0.875rem; color: var(--color-text-secondary); }
+.patient-list__actions { display: flex; gap: var(--spacing-2); }
+.patient-list__item--empty { text-align: center; padding: var(--spacing-8); color: var(--color-text-secondary); }
+
+.button--edit { background-color: var(--color-primary); color: white; }
+.button--delete { background-color: var(--color-danger); color: white; }
+
+.alert { padding: var(--spacing-4); margin-bottom: var(--spacing-6); border-radius: var(--border-radius-md); border: 1px solid transparent; }
+.alert--success { background-color: #dcfce7; color: var(--color-success); border-color: #86efac; }
+.alert--danger { background-color: #fee2e2; color: var(--color-danger); border-color: #fca5a5; }
