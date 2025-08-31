@@ -7,6 +7,7 @@ import { ApiService } from '../../core/api';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './my-exams.html',
+  styleUrls: ['./my-exams.css']
 })
 export class MyExams implements OnInit {
   exams: any[] = [];
