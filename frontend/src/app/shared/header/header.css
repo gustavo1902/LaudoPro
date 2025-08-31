@@ -1,0 +1,118 @@
+.app-header {
+  background-color: var(--color-text-primary);
+  color: var(--color-bg-white);
+  padding: var(--spacing-4) var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-bg-white);
+}
+
+.nav {
+  display: block;
+}
+.nav__list {
+  display: flex;
+  gap: var(--spacing-6);
+  list-style: none;
+  align-items: center;
+}
+.nav__link {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  padding-bottom: var(--spacing-1);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+.nav__link:hover {
+  color: var(--color-bg-white);
+  border-bottom-color: var(--color-primary);
+}
+.nav__link--active {
+  color: var(--color-bg-white);
+  font-weight: 600;
+  border-bottom-color: var(--color-primary);
+}
+
+.button--logout {
+  background-color: transparent;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  padding: var(--spacing-1) var(--spacing-4);
+}
+.button--logout:hover {
+  background-color: var(--color-danger);
+  color: var(--color-bg-white);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-bg-white);
+  cursor: pointer;
+  z-index: 1010;
+}
+.nav-toggle__icon {
+  width: 28px;
+  height: 28px;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+  .nav {
+    display: none;
+  }
+  .nav--open {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-text-primary);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-4);
+  }
+  .nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-2);
+  }
+  .nav__list li {
+    width: 100%;
+  }
+  .nav__link {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-2);
+    border-bottom: none;
+  }
+  .nav__link:hover, .nav__link--active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-md);
+  }
+  .button--logout {
+    width: 100%;
+    text-align: center;
+    padding: var(--spacing-2);
+  }
+}
