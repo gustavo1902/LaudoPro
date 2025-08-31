@@ -1,23 +1,50 @@
 <div class="container">
-  <h2>Meu Perfil</h2>
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+  <header class="page-header">
+    <h1 class="page-header__title">Meu Perfil</h1>
+    <p class="page-header__subtitle">Mantenha seus dados de contato sempre atualizados.</p>
+  </header>
 
-  <div class="card">
-    <form (ngSubmit)="updateProfile()">
+  <div *ngIf="errorMessage" class="alert alert--danger">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert--success">{{ successMessage }}</div>
+
+  <div class="profile-card">
+    <div class="profile-card__info">
+      <h2 class="profile-card__title">Informações Pessoais</h2>
+      <p class="profile-card__description">
+        Aqui você pode editar seus dados. Lembre-se que o e-mail não pode ser alterado por questões de segurança.
+      </p>
+      <div class="profile-card__icon-background">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0z" />
+        </svg>
+      </div>
+    </div>
+
+    <form (ngSubmit)="updateProfile()" class="profile-form">
       <div class="form-group">
-        <label for="name">Nome:</label>
-        <input type="text" id="name" [(ngModel)]="patientProfile.name" name="name" required>
+        <label for="name" class="form-group__label">Nome Completo</label>
+        <div class="form-group__input-wrapper">
+          <span class="form-group__icon"></span>
+          <input type="text" id="name" [(ngModel)]="patientProfile.name" name="name" required class="form-group__input">
+        </div>
       </div>
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" [(ngModel)]="patientProfile.email" name="email" required disabled>
+        <label for="email" class="form-group__label">Email</label>
+        <div class="form-group__input-wrapper">
+          <span class="form-group__icon"></span>
+          <input type="email" id="email" [(ngModel)]="patientProfile.email" name="email" required disabled class="form-group__input">
+        </div>
       </div>
       <div class="form-group">
-        <label for="phone">Telefone:</label>
-        <input type="text" id="phone" [(ngModel)]="patientProfile.phone" name="phone">
+        <label for="phone" class="form-group__label">Telefone</label>
+        <div class="form-group__input-wrapper">
+          <span class="form-group__icon"></span>
+          <input type="text" id="phone" [(ngModel)]="patientProfile.phone" name="phone" class="form-group__input">
+        </div>
       </div>
-      <button type="submit">Atualizar Perfil</button>
+      <button type="submit" class="button button--primary profile-form__submit">
+        <span>Atualizar Perfil</span>
+      </button>
     </form>
   </div>
 </div>
