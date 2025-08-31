@@ -8,6 +8,7 @@ import { ApiService } from '../../core/api';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './patient-profile.html',
+  styleUrls: ['./patient-profile.css']
 })
 export class PatientProfile implements OnInit {
   patientProfile: any = {};
