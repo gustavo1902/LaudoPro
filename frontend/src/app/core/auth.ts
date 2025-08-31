@@ -41,7 +41,6 @@ export class AuthService {
     );
   }
   
-  // Novo método para registro
   register(name: string, email: string, password: string, role: 'PACIENTE' | 'ADMIN'): Observable<any> {
     const user = { name, email, password, role };
     return this.http.post(this.apiUrl + '/register', user);
@@ -71,7 +70,7 @@ export class AuthService {
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        // O papel pode estar em um campo diferente, como "roles" ou "scopes"
+      
         return decodedToken.role || decodedToken.roles?.[0] || null; 
       } catch (e) {
         console.error('Erro ao decodificar JWT:', e);
