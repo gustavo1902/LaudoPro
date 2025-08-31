@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router'; 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth';
-import { HeaderComponent } from '../../shared/header/header';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, HeaderComponent]
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    RouterLink 
+  ]
 })
 export class LoginComponent {
   email = '';
@@ -24,7 +27,6 @@ export class LoginComponent {
     this.authService.login(this.email, this.senha).subscribe({
       next: (response) => {
         console.log('Login bem-sucedido', response);
-        // A lógica de roteamento agora usa o getUserRole para ser mais robusta
         const userRole = this.authService.getUserRole();
         if (userRole === 'ADMIN') {
           this.router.navigate(['/admin/dashboard']);
