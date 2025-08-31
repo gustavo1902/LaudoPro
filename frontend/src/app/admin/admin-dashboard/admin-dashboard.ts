@@ -10,11 +10,12 @@ import { debounceTime } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-dashboard.html',
-  styleUrl: './admin-dashboard.css'
+  styleUrls: ['./admin-dashboard.css']
 })
 export class AdminDashboard implements OnInit {
   stats: any = {};
   examTypes: any[] = [];
+  maxCount: number = 0;
   isLoading = true;
   errorMessage: string | null = null;
   filterForm: FormGroup;
@@ -47,16 +48,19 @@ export class AdminDashboard implements OnInit {
 
     forkJoin({
       stats: this.apiService.getDashboardStats(filters),
-      examsByStatus: this.apiService.getExamsByStatus(filters),
       patientsCount: this.apiService.getPatientsCount()
     }).subscribe({
-      next: ({ stats, examsByStatus, patientsCount }) => {
+      next: ({ stats, patientsCount }) => {
         this.stats = {
           exams: stats.totalExams,
-          patients: patientsCount,
-          completedExams: examsByStatus.find(s => s.status === 'CONCLUÍDO')?.count || 0
+          patients: patientsCount
         };
         this.examTypes = stats.examsByType;
+
+        this.maxCount = this.examTypes.length > 0
+          ? Math.max(...this.examTypes.map(t => t.count))
+          : 0;
+
         this.isLoading = false;
       },
       error: (err) => {
