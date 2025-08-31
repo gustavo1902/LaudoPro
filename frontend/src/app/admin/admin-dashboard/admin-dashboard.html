@@ -1,50 +1,67 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-3xl font-bold text-gray-800 mb-4">Dashboard Administrativo</h1>
+<div class="container">
+  <header class="page-header">
+    <h1 class="page-header__title">Dashboard Administrativo</h1>
+  </header>
 
-  <div class="bg-white p-4 rounded-lg shadow-md mb-6">
-    <h3 class="font-bold text-lg mb-2">Filtrar por Período</h3>
-    <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-      <div>
-        <label for="startDate" class="block text-sm font-medium text-gray-700">De</label>
-        <input type="date" id="startDate" formControlName="startDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+  <div class="card filter-card">
+    <h3 class="card__title">Filtrar por Período</h3>
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="form-group">
+        <label for="startDate" class="form-group__label">De</label>
+        <input type="date" id="startDate" formControlName="startDate" class="form-group__input">
       </div>
-      <div>
-        <label for="endDate" class="block text-sm font-medium text-gray-700">Até</label>
-        <input type="date" id="endDate" formControlName="endDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      <div class="form-group">
+        <label for="endDate" class="form-group__label">Até</label>
+        <input type="date" id="endDate" formControlName="endDate" class="form-group__input">
       </div>
-      <div>
-        <button type="button" (click)="resetFilters()" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
-          Limpar Filtros
-        </button>
-      </div>
+      <button type="button" (click)="resetFilters()" class="button button--secondary">
+        Limpar Filtros
+      </button>
     </form>
   </div>
 
-  <div *ngIf="isLoading" class="text-center py-10">Carregando estatísticas...</div>
-  <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">{{ errorMessage }}</div>
+  <div *ngIf="isLoading" class="loading-message">Carregando estatísticas...</div>
+  <div *ngIf="errorMessage" class="alert alert--danger">{{ errorMessage }}</div>
 
-  <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
-      <h2 class="text-xl font-semibold">Total de Exames</h2>
-      <p class="text-4xl font-bold">{{ stats.exams }}</p>
+  <div *ngIf="!isLoading" class="stats-grid">
+    <div class="stats-card stats-card--exams">
+      <div class="stats-card__content">
+        <h2 class="stats-card__title">Total de Exames</h2>
+        <p class="stats-card__value">{{ stats.exams }}</p>
+      </div>
+      <div class="stats-card__icon">
+        </div>
     </div>
-    <div class="bg-green-500 text-white p-6 rounded-lg shadow-lg">
-      <h2 class="text-xl font-semibold">Total de Pacientes</h2>
-      <p class="text-4xl font-bold">{{ stats.patients }}</p>
+    <div class="stats-card stats-card--patients">
+      <div class="stats-card__content">
+        <h2 class="stats-card__title">Total de Pacientes</h2>
+        <p class="stats-card__value">{{ stats.patients }}</p>
+      </div>
+      <div class="stats-card__icon">
+        </div>
     </div>
-    <div class="bg-indigo-500 text-white p-6 rounded-lg shadow-lg">
-      <h2 class="text-xl font-semibold">Exames Concluídos</h2>
-      <p class="text-4xl font-bold">{{ stats.completedExams }}</p>
+    <div class="stats-card stats-card--completed">
+      <div class="stats-card__content">
+        <h2 class="stats-card__title">Exames Concluídos</h2>
+        <p class="stats-card__value">{{ stats.completedExams || 0 }}</p>
+      </div>
+       <div class="stats-card__icon">
+        </div>
     </div>
   </div>
 
-  <div *ngIf="!isLoading && examTypes.length > 0" class="mt-8 bg-white p-6 rounded-lg shadow-md">
-    <h3 class="text-2xl font-bold mb-4">Exames por Tipo</h3>
-    <ul>
-      <li *ngFor="let type of examTypes" class="flex justify-between items-center py-2 border-b">
-        <span class="text-lg text-gray-700">{{ type.type }}</span>
-        <span class="text-lg font-bold text-gray-900">{{ type.count }}</span>
-      </li>
-    </ul>
+  <div *ngIf="!isLoading && examTypes.length > 0" class="card chart-card">
+    <h3 class="card__title">Exames por Tipo</h3>
+    <div class="chart-card__list">
+      <div *ngFor="let type of examTypes" class="progress-bar">
+        <div class="progress-bar__info">
+          <span class="progress-bar__label">{{ type.type }}</span>
+          <span class="progress-bar__value">{{ type.count }}</span>
+        </div>
+        <div class="progress-bar__track">
+          <div class="progress-bar__fill" [style.width.%]="(type.count / maxCount) * 100"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
