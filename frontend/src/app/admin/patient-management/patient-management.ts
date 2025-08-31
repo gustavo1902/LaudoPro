@@ -8,6 +8,7 @@ import { ApiService } from '../../core/api';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './patient-management.html',
+  styleUrls: ['./patient-management.css']
 })
 export class PatientManagement implements OnInit {
   patients: any[] = [];
