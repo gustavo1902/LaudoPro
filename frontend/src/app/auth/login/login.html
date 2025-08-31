@@ -1,34 +1,30 @@
 <div class="login-container">
   <div class="login-card">
-    <h1 class="text-3xl font-bold text-center mb-6">Login LaudoPro</h1>
+    <h1 class="login-card__title">Login</h1>
 
-    <div *ngIf="errorMessage" class="error-message mb-4" role="alert">
+    <div *ngIf="errorMessage" class="alert alert--danger" role="alert">
       {{ errorMessage }}
     </div>
 
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" class="login-form">
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input id="email" type="email" [(ngModel)]="email" name="email" required
-               class="form-input">
+        <label for="email" class="form-group__label">Email:</label>
+        <input id="email" type="email" [(ngModel)]="email" name="email" required class="form-group__input">
       </div>
       <div class="form-group">
-        <label for="senha">Senha:</label>
-        <input id="senha" type="password" [(ngModel)]="senha" name="senha" required
-               class="form-input">
+        <label for="senha" class="form-group__label">Senha:</label>
+        <input id="senha" type="password" [(ngModel)]="senha" name="senha" required class="form-group__input">
       </div>
-      <button type="submit" class="btn-primary w-full">
+      <button type="submit" class="button button--primary login-form__submit">
         Entrar
       </button>
     </form>
 
-    <div class="mt-4 text-center">
-      <p class="text-sm text-gray-600">
-        Não tem uma conta?
-        <a routerLink="/registro" class="font-medium text-blue-600 hover:text-blue-500">
-          Registre-se
-        </a>
-      </p>
+    <div class="login-card__footer">
+      <span>Não tem uma conta?</span>
+      <a routerLink="/registro" class="link-registro">
+        Registre-se
+      </a>
     </div>
     
   </div>
