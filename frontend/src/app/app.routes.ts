@@ -9,8 +9,10 @@ import { PatientManagement } from './admin/patient-management/patient-management
 import { ExamManagement } from './admin/exam-management/exam-management';
 import { MyExams} from './patient/my-exams/my-exams';
 import { PatientProfile } from './patient/patient-profile/patient-profile';
+import { HomeComponent } from './home/home.component'; 
 
 export const routes: Routes = [
+  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistrationComponent },
   {
@@ -33,6 +35,6 @@ export const routes: Routes = [
       { path: 'perfil', component: PatientProfile },
     ]
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: PageNotFound }
 ];
