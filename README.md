@@ -1,6 +1,6 @@
 # LaudoPro
 
-LaudoPro é uma plataforma web para clínicas e laboratórios gerenciarem exames médicos, permitindo upload seguro de laudos e acesso por pacientes. O sistema suporta perfis distintos para administradores e pacientes, garantindo acesso restrito às funcionalidades correspondentes.
+LaudoPro é uma plataforma web para gerenciar exames médicos, permitindo upload seguro de laudos e acesso por pacientes. O sistema suporta perfis distintos para administradores e pacientes, garantindo acesso restrito às funcionalidades correspondentes.
 
 ## Funcionalidades Principais
 
