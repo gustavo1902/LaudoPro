@@ -2,30 +2,18 @@
   <div class="header-container">
     <a routerLink="/" class="logo">LaudoPro</a>
 
-    <button class="nav-toggle" (click)="toggleMenu()" *ngIf="authService.isAuthenticated()">
-      <svg *ngIf="!isMenuOpen" xmlns="http://www.w3.org/2000/svg" class="nav-toggle__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <svg *ngIf="isMenuOpen" xmlns="http://www.w3.org/2000/svg" class="nav-toggle__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
+    <button class="nav-toggle" (click)="toggleMenu()">
+      <svg *ngIf="!isMenuOpen" xmlns="http://www.w3.org/2000/svg" class="nav-toggle__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+      <svg *ngIf="isMenuOpen" xmlns="http://www.w3.org/2000/svg" class="nav-toggle__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
     </button>
 
     <nav *ngIf="authService.isAuthenticated()" class="nav" [ngClass]="{ 'nav--open': isMenuOpen }">
+      </nav>
+
+    <nav *ngIf="!authService.isAuthenticated()" class="nav" [ngClass]="{ 'nav--open': isMenuOpen }">
       <ul class="nav__list">
-        <ng-container *ngIf="authService.isAdmin()">
-          <li><a routerLink="/admin/dashboard" routerLinkActive="nav__link--active" [routerLinkActiveOptions]="{exact: true}" class="nav__link">Dashboard</a></li>
-          <li><a routerLink="/admin/pacientes" routerLinkActive="nav__link--active" class="nav__link">Pacientes</a></li>
-          <li><a routerLink="/admin/exames" routerLinkActive="nav__link--active" class="nav__link">Exames</a></li>
-        </ng-container>
-        <ng-container *ngIf="authService.isPatient()">
-          <li><a routerLink="/paciente/dashboard" routerLinkActive="nav__link--active" [routerLinkActiveOptions]="{exact: true}" class="nav__link">Dashboard</a></li>
-          <li><a routerLink="/paciente/meus-exames" routerLinkActive="nav__link--active" class="nav__link">Meus Exames</a></li>
-          <li><a routerLink="/paciente/perfil" routerLinkActive="nav__link--active" class="nav__link">Meu Perfil</a></li>
-        </ng-container>
-        <li>
-          <button class="button button--logout" (click)="authService.logout()">Sair</button>
-        </li>
+        <li><a routerLink="/login" class="nav__link">Login</a></li>
+        <li><a routerLink="/registro" class="button button--primary">Registrar-se</a></li>
       </ul>
     </nav>
   </div>
